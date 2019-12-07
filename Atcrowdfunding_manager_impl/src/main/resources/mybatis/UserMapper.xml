@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.atcrowdfunding.manager.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.atguigu.atcrowdfunding.bean.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="loginacct" jdbcType="VARCHAR" property="loginacct" />
+    <result column="userpswd" jdbcType="CHAR" property="userpswd" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="createtime" jdbcType="CHAR" property="createtime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, loginacct, userpswd, username, email, createtime
+  </sql>
+  <select id="selectByExample" parameterType="com.atguigu.atcrowdfunding.bean.UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectUserByText" parameterType="String" resultMap="BaseResultMap">
+    SELECT * FROM t_user
+    <where>
+      <if test="text != null">
+        loginacct LIKE concat('%',#{text},'%')
+      </if>
+    </where>
+  </select>
+
+  <select id="selectRoleIdByUid" parameterType="int" resultType="int">
+    SELECT roleid from t_user_role where userid=#{id}
+  </select>
+
+  <select id="login" parameterType="map" resultMap="BaseResultMap">
+    select * from t_user where loginacct=#{loginacct} and userpswd=#{userpswd}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.atguigu.atcrowdfunding.bean.UserExample">
+    delete from t_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.atguigu.atcrowdfunding.bean.User">
+    insert into t_user (id, loginacct, userpswd, 
+      username, email, createtime
+      )
+    values (#{id,jdbcType=INTEGER}, #{loginacct,jdbcType=VARCHAR}, #{userpswd,jdbcType=CHAR}, 
+      #{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{createtime,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.atguigu.atcrowdfunding.bean.User">
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="loginacct != null">
+        loginacct,
+      </if>
+      <if test="userpswd != null">
+        userpswd,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="loginacct != null">
+        #{loginacct,jdbcType=VARCHAR},
+      </if>
+      <if test="userpswd != null">
+        #{userpswd,jdbcType=CHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.atguigu.atcrowdfunding.bean.UserExample" resultType="java.lang.Long">
+    select count(*) from t_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_user
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.loginacct != null">
+        loginacct = #{record.loginacct,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userpswd != null">
+        userpswd = #{record.userpswd,jdbcType=CHAR},
+      </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null">
+        createtime = #{record.createtime,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_user
+    set id = #{record.id,jdbcType=INTEGER},
+      loginacct = #{record.loginacct,jdbcType=VARCHAR},
+      userpswd = #{record.userpswd,jdbcType=CHAR},
+      username = #{record.username,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.atguigu.atcrowdfunding.bean.User">
+    update t_user
+    <set>
+      <if test="loginacct != null">
+        loginacct = #{loginacct,jdbcType=VARCHAR},
+      </if>
+      <if test="userpswd != null">
+        userpswd = #{userpswd,jdbcType=CHAR},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.atguigu.atcrowdfunding.bean.User">
+    update t_user
+    set loginacct = #{loginacct,jdbcType=VARCHAR},
+      userpswd = #{userpswd,jdbcType=CHAR},
+      username = #{username,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <insert id="insertBatchUser" parameterType="list" >
+    insert into t_user(loginacct, userpswd, username, email, createtime) VALUES
+    <foreach collection="list" separator="," item="user">
+      (#{user.loginacct},#{user.userpswd},#{user.username},#{user.email},#{user.createtime})
+    </foreach>
+  </insert>
+
+  <insert id="insertUserRoleRelationship">
+    INSERT INTO t_user_role(userid,roleid) VALUES
+    <foreach collection="ids" item="roleid" separator=",">
+      (#{userId},#{roleid})
+    </foreach>
+  </insert>
+
+  <delete id="deleteUserRoleRelationship">
+    DELETE FROM t_user_role WHERE userid=#{userId} AND roleid IN
+    <foreach collection="ids" item="roleid" separator="," open="(" close=")">
+      #{roleid}
+    </foreach>
+  </delete>
+
+  <select id="selectMyPermissionByUid" parameterType="int" resultType="Permission">
+    SELECT DISTINCT t_permission.id, t_permission.pid,t_permission.`name`,t_permission.icon,t_permission.url
+    FROM t_permission,t_role_permission,t_role,t_user_role,t_user
+    WHERE
+    t_permission.id = t_role_permission.permissionid
+    AND t_role_permission.roleid = t_role.id
+    AND t_role.id = t_user_role.roleid
+    AND t_user_role.userid = t_user.id
+    AND t_user.id = #{userId}
+  </select>
+</mapper>

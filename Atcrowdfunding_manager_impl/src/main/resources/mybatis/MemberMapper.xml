@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.atcrowdfunding.potal.dao.MemberMapper">
+  <resultMap id="BaseResultMap" type="com.atguigu.atcrowdfunding.bean.Member">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="loginacct" jdbcType="VARCHAR" property="loginacct" />
+    <result column="userpswd" jdbcType="CHAR" property="userpswd" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="authstatus" jdbcType="CHAR" property="authstatus" />
+    <result column="usertype" jdbcType="CHAR" property="usertype" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="cardnum" jdbcType="VARCHAR" property="cardnum" />
+    <result column="accttype" jdbcType="CHAR" property="accttype" />
+    <result column="phonenum" jdbcType="VARCHAR" property="phonenum" />
+  </resultMap>
+
+  <select id="login" parameterType="Map" resultType="Member">
+    SELECT * from t_member WHERE loginacct=#{loginacct} AND userpswd=#{userpswd}
+  </select>
+
+  <select id="selectMemberByPiid" resultMap="BaseResultMap">
+    SELECT a.* from t_member as a inner join t_ticket as b on a.id = b.memberid
+    WHERE b.piid = #{piid}
+  </select>
+
+  <select id="selectMemberById" resultMap="BaseResultMap">
+    SELECT * from t_member WHERE id=#{id}
+  </select>
+
+  <update id="updateAcctType" parameterType="Member">
+    UPDATE t_member SET accttype=#{accttype} WHERE id=#{id}
+  </update>
+
+  <update id="updateBasicinfo" parameterType="Member">
+    UPDATE t_member SET
+    realname = #{realname},
+    cardnum = #{cardnum},
+    phonenum = #{phonenum}
+    WHERE id = #{id}
+  </update>
+
+  <update id="updateEmail" parameterType="Member">
+    UPDATE t_member SET
+    email = #{email}
+    WHERE id = #{id}
+  </update>
+
+  <update id="updateAuthStatus" parameterType="Member">
+    UPDATE t_member SET
+    authstatus = #{authstatus}
+    WHERE id = #{id}
+  </update>
+</mapper>

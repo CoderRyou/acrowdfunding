@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.atcrowdfunding.potal.dao.TicketMapper">
+    <resultMap id="BaseResultMap" type="com.atguigu.atcrowdfunding.bean.Ticket">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="memberid" jdbcType="INTEGER" property="memberid"/>
+        <result column="piid" jdbcType="VARCHAR" property="piid"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+        <result column="authcode" jdbcType="CHAR" property="authcode"/>
+        <result column="pstep" jdbcType="VARCHAR" property="pstep"/>
+    </resultMap>
+
+    <select id="selectTicketByMemberidAndStatus" parameterType="Ticket" resultMap="BaseResultMap">
+        SELECT * from t_ticket WHERE memberid=#{memberid} AND status='0'
+    </select>
+
+    <!--<select id="selectAll" resultMap="BaseResultMap">-->
+        <!--SELECT * FROM t_ticket-->
+    <!--</select>-->
+
+    <insert id="insertTicket" parameterType="Ticket">
+        INSERT INTO t_ticket
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="memberid != null">
+                memberid,
+            </if>
+            <if test="piid != null">
+                piid,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="authcode != null">
+                authcode,
+            </if>
+            <if test="pstep != null">
+                pstep,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="memberid != null">
+                #{memberid},
+            </if>
+            <if test="piid != null">
+                #{piid},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="authcode != null">
+                #{authcode},
+            </if>
+            <if test="pstep != null">
+                #{pstep},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updatePstepById" parameterType="Ticket">
+        UPDATE t_ticket SET pstep=#{pstep} WHERE id=#{id}
+    </update>
+
+    <update id="update" parameterType="Ticket">
+        UPDATE t_ticket
+        <set>
+            <if test="memberid != null">
+                memberid=#{memberid},
+            </if>
+            <if test="piid != null">
+                piid=#{piid},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="authcode != null">
+                authcode=#{authcode},
+            </if>
+            <if test="pstep != null">
+                pstep=#{pstep},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>
